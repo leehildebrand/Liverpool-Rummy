@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { AlertCircleIcon, CheckCircle2Icon } from 'lucide-react';
-import { Alert, AlertDescription } from '../../components/ui/alert';
+import { Alert, AlertDescription } from '../ui/alert';
 import { useId } from 'react';
 
 const statusAlertVariants = cva('', {
