@@ -18,7 +18,7 @@
     <fileNotFoundPage>FileNotFound</fileNotFoundPage>
     <genericErrorPage>Exception</genericErrorPage>
     <inMaintenancePage>InMaintenance</inMaintenancePage>
-     <indexPage>CommunitiesLanding</indexPage> 
+    <indexPage>SiteLogin</indexPage>
     <masterLabel>LiverpoolRummy</masterLabel>
     <redirectToCustomDomain>false</redirectToCustomDomain>
     <referrerPolicyOriginWhenCrossOrigin>true</referrerPolicyOriginWhenCrossOrigin>
