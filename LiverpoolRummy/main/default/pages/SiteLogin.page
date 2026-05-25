@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apex:page showHeader="false" standardStylesheets="false">
+    <!-- Placeholder page for CustomSite indexPage requirement -->
+</apex:page>
