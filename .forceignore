@@ -13,3 +13,12 @@ package.xml
 
 node_modules/
 .DS_Store
+
+# Metadata types to ignore
+**/reportFolders/**
+**/dashboardFolders/**
+**/reports/**
+**/reportTypes/**
+**/dashboards/**
+**/profiles/**
+**/audience/**
