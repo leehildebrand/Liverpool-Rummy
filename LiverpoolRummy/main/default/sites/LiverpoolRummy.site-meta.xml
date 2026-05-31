@@ -23,9 +23,8 @@
     <redirectToCustomDomain>false</redirectToCustomDomain>
     <referrerPolicyOriginWhenCrossOrigin>true</referrerPolicyOriginWhenCrossOrigin>
     <selfRegPage>CommunitiesSelfReg</selfRegPage>
-  <!--  <serverIsDown>SNA_U2rxy_sf_default_cdn_byo1</serverIsDown> -->
-   <!-- <siteAdmin>epic.out.d1d3a2d722c8@orgfarm.salesforce.com</siteAdmin> -->
-   <!--  <siteGuestRecordDefaultOwner>epic.out.d1d3a2d722c8@orgfarm.salesforce.com</siteGuestRecordDefaultOwner> -->
+    <siteAdmin>test-pheblkwlroep@example.com</siteAdmin>
+    <siteGuestRecordDefaultOwner>test-pheblkwlroep@example.com</siteGuestRecordDefaultOwner>
     <siteType>ChatterNetwork</siteType>
     <urlPathPrefix>LiverpoolRummyvforcesite</urlPathPrefix>
 </CustomSite>

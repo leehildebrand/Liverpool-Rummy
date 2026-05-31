@@ -1,10 +1,10 @@
 {
-  "type": "sfdc_cms__site",
-  "title": "LiverpoolRummy",
-  "contentBody": {
-    "authenticationType": "AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED",
-    "appContainer": true,
-    "appSpace": "c__LiverpoolRummy"
+  "type" : "sfdc_cms__site",
+  "title" : "LiverpoolRummy",
+  "contentBody" : {
+    "authenticationType" : "AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED",
+    "appContainer" : true,
+    "appSpace" : "c__LiverpoolRummy"
   },
-  "urlName": "liverpoolrummy"
+  "urlName" : "liverpoolrummy"
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Player_for_Game__c</fullName>
+    <description>Who played this hand in which game?</description>
+    <inlineHelpText>Who played this hand in which game?</inlineHelpText>
+    <label>Player for Game</label>
+    <referenceTo>Player_for_Game__c</referenceTo>
+    <relationshipLabel>Player&apos;s Hands</relationshipLabel>
+    <relationshipName>Player_s_Hands_for_Game</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>true</writeRequiresMasterRead>
+</CustomField>
