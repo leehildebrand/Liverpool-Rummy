@@ -16,6 +16,7 @@
     <label>Liverpool Rummy</label>
     <navType>Standard</navType>
     <tabs>standard-Contact</tabs>
+    <tabs>Game__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Liverpool_Rummy_UtilityBar</utilityBar>
 </CustomApplication>
