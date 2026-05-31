@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>These are the hands of a Liverpool Rummy game</description>
+    <label>Hand</label>
+    <pluralLabel>Hands</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

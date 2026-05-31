@@ -9,17 +9,44 @@
         <label>Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Winner__c</field>
+                <behavior>Required</behavior>
+                <field>Player_for_Game__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Player__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Hand_Order__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>CreatedById</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Score</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Points__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Jokers__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -31,13 +58,6 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
-    <relatedLists>
-        <excludeButtons>MassChangeOwner</excludeButtons>
-        <fields>NAME</fields>
-        <fields>Player__c</fields>
-        <fields>Score__c</fields>
-        <relatedList>Player_for_Game__c.Game__c</relatedList>
-    </relatedLists>
     <relatedLists>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
@@ -63,7 +83,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hRL00000IbtzF</masterLabel>
+        <masterLabel>00hRL00000Ibuld</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

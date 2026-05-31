@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
+    <excludeButtons>RequestUseSfdc</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -107,11 +110,14 @@
         </relatedContentItems>
     </relatedContent>
     <relatedLists>
-        <relatedList>RelatedFileList</relatedList>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Game__c</fields>
+        <fields>Score__c</fields>
+        <relatedList>Player_for_Game__c.Player__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Game__c.Winner__c</relatedList>
+        <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

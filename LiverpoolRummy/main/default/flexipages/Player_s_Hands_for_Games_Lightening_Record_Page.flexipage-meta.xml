@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentName>force:detailPanel</componentName>
+                <identifier>force_detailPanel</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>main</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <masterLabel>Player&apos;s Hands for Games Lightening Record Page</masterLabel>
+    <sobjectType>Player_s_Hand_for_Game__c</sobjectType>
+    <template>
+        <name>flexipage:recordHomeSingleColNoHeaderTemplateDesktop</name>
+        <properties>
+            <name>enablePageActionConfig</name>
+            <value>false</value>
+        </properties>
+    </template>
+    <type>RecordPage</type>
+</FlexiPage>
