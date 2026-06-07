@@ -1,22 +1,44 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { z } from "zod";
 import { CenteredPageLayout } from "../layout/centered-page-layout";
 import { AuthForm } from "../forms/auth-form";
 import { useAppForm } from "../hooks/form";
 import { createDataSDK } from "@salesforce/sdk-data";
 import { ROUTES } from "../authenticationConfig";
-import { emailSchema, getStartUrl, type AuthResponse } from "../authHelpers";
-import { handleApiResponse, getErrorMessage } from "../utils/helpers";
+import { emailSchema } from "../authHelpers";
+import { getErrorMessage } from "../utils/helpers";
 
 const loginSchema = z.object({
 	email: emailSchema,
 	password: z.string().min(1, "Password is required"),
 });
 
+const LOGIN_CONTACT_QUERY = `
+	query LoginContact($email: String) {
+		uiapi {
+			query {
+				Contact(where: { Email: { eq: $email } }, first: 1) {
+					edges {
+						node {
+							Id
+							Password__c @optional { value }
+						}
+					}
+				}
+			}
+		}
+	}
+`;
+
+function throwOnGraphQLErrors(response: any): void {
+	if (response?.errors?.length) {
+		throw new Error(response.errors.map((e: any) => e.message).join("; "));
+	}
+}
+
 export default function Login() {
 	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
 	const [submitError, setSubmitError] = useState<string | null>(null);
 
 	const form = useAppForm({
@@ -25,32 +47,27 @@ export default function Login() {
 		onSubmit: async ({ value }) => {
 			setSubmitError(null);
 			try {
-				// [Dev Note] Salesforce Integration:
-				// We use the Data SDK fetch to make an authenticated (or guest) call to Salesforce.
-				// "/services/apexrest/auth/login" refers to a custom Apex REST resource.
-				// You must ensure this Apex class exists in your org and handles the login logic
-				// (e.g., creating a session or returning a token).
 				const sdk = await createDataSDK();
-				const response = await sdk.fetch!("/services/apexrest/auth/login", {
-					method: "POST",
-					body: JSON.stringify({
-						email: value.email.trim().toLowerCase(),
-						password: value.password,
-						startUrl: getStartUrl(searchParams),
-					}),
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-					},
+				const normalizedEmail = value.email.trim().toLowerCase();
+				const response: any = await sdk.graphql?.(LOGIN_CONTACT_QUERY, {
+					email: normalizedEmail,
 				});
-				const result = await handleApiResponse<AuthResponse>(response, "Login failed");
-				if (result?.redirectUrl) {
-					// Hard navigate to the URL which establishes the server session cookie
-					window.location.replace(result.redirectUrl);
-				} else {
-					// In case redirectUrl is null, navigate to home
-					navigate("/", { replace: true });
+
+				throwOnGraphQLErrors(response);
+
+				const contactNode = response?.data?.uiapi?.query?.Contact?.edges?.[0]?.node;
+				if (!contactNode) {
+					setSubmitError("User not found.");
+					return;
 				}
+
+				const savedPassword = contactNode?.Password__c?.value ?? "";
+				if (savedPassword !== value.password) {
+					setSubmitError("Invalid password");
+					return;
+				}
+
+				navigate("/", { replace: true });
 			} catch (err) {
 				setSubmitError(getErrorMessage(err, "Login failed"));
 			}
