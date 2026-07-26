@@ -1,8 +1,8 @@
 <%- include('partials/header', { title: title }) %>
 <section class="card form-card">
   <div class="card-head">
-    <h2>Record a game</h2>
-    <span>Enter each participating player and their final score.</span>
+    <h2>Start a game</h2>
+    <span>Select participants, then record each hand as you play.</span>
   </div>
   <% if (error) { %>
     <div class="alert alert-error"><%= error %></div>
@@ -22,27 +22,16 @@
       </label>
     </div>
 
-    <div class="score-entry-grid">
-      <% for (var slot = 0; slot < 8; slot += 1) { %>
-        <div class="score-row">
-          <label>
-            <span>Player <%= slot + 1 %></span>
-            <select name="player_id">
-              <option value="">Select a player</option>
-              <% players.forEach(function (player) { %>
-                <option value="<%= player.id %>"><%= player.name %></option>
-              <% }); %>
-            </select>
-          </label>
-          <label>
-            <span>Score</span>
-            <input type="number" name="score" min="0" step="1" placeholder="0">
-          </label>
-        </div>
-      <% } %>
+    <div class="participant-grid">
+      <% players.forEach(function (player) { %>
+        <label class="checkbox-card">
+          <input type="checkbox" name="player_id" value="<%= player.id %>">
+          <span><%= player.name %></span>
+        </label>
+      <% }); %>
     </div>
 
-    <button class="button" type="submit">Save game</button>
+    <button class="button" type="submit">Start game and record hands</button>
   </form>
 </section>
 <%- include('partials/footer') %>

@@ -353,6 +353,32 @@ a {
   gap: 14px;
 }
 
+.participant-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.checkbox-card input[type='checkbox'] {
+  width: auto;
+}
+
+.cell-subtext {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .score-row {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -454,7 +480,8 @@ th {
   }
 
   .filter-grid,
-  .audit-grid {
+  .audit-grid,
+  .participant-grid {
     grid-template-columns: 1fr;
   }
 
