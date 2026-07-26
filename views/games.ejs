@@ -1,0 +1,77 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card form-card">
+  <div class="card-head">
+    <h2>Games history</h2>
+    <span>Filter by player or date, then page through game records.</span>
+  </div>
+
+  <form method="get" action="/games" class="form-grid filter-grid">
+    <label>
+      <span>Player</span>
+      <select name="player_id">
+        <option value="">All players</option>
+        <% players.forEach(function (player) { %>
+          <option value="<%= player.id %>" <%= filters.playerId === player.id ? 'selected' : '' %>><%= player.name %></option>
+        <% }); %>
+      </select>
+    </label>
+    <label>
+      <span>Date from</span>
+      <input type="date" name="date_from" value="<%= filters.dateFrom %>">
+    </label>
+    <label>
+      <span>Date to</span>
+      <input type="date" name="date_to" value="<%= filters.dateTo %>">
+    </label>
+    <div class="actions actions-inline">
+      <button class="button" type="submit">Apply filters</button>
+      <a class="button button-secondary" href="/games">Reset</a>
+    </div>
+  </form>
+</section>
+
+<section class="card">
+  <div class="card-head">
+    <h3>Results</h3>
+    <span><%= pagination.totalGames %> games found</span>
+  </div>
+
+  <% if (games.length) { %>
+    <div class="stacked-cards">
+      <% games.forEach(function (game) { %>
+        <article class="mini-card">
+          <div class="mini-head">
+            <strong><a class="link-plain" href="/games/<%= game.id %>">Game #<%= game.id %></a></strong>
+            <span><%= game.playedOn %></span>
+          </div>
+          <% if (game.winner) { %>
+            <p class="mini-summary">Winner: <%= game.winner.playerName %> with <%= game.winner.score %> points.</p>
+          <% } %>
+          <ul class="score-list">
+            <% game.scores.forEach(function (score) { %>
+              <li>
+                <span><%= score.playerName %></span>
+                <strong><%= score.score %></strong>
+              </li>
+            <% }); %>
+          </ul>
+        </article>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <p class="empty-state">No games match these filters.</p>
+  <% } %>
+
+  <div class="pagination-bar">
+    <span>Page <%= pagination.page %> of <%= pagination.totalPages %></span>
+    <div class="actions actions-inline">
+      <% if (pagination.hasPrev) { %>
+        <a class="button button-secondary" href="<%= pagination.prevUrl %>">Previous</a>
+      <% } %>
+      <% if (pagination.hasNext) { %>
+        <a class="button button-secondary" href="<%= pagination.nextUrl %>">Next</a>
+      <% } %>
+    </div>
+  </div>
+</section>
+<%- include('partials/footer') %>

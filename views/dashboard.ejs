@@ -1,0 +1,130 @@
+<%- include('partials/header', { title: title }) %>
+<section class="hero card">
+  <div>
+    <p class="eyebrow">Game overview</p>
+    <h2>Track players, scores, wins, and joker-heavy hands in one place.</h2>
+    <p class="lede">Use the forms below to record games, keep a running player list, and see the key records at a glance.</p>
+  </div>
+  <div class="stat-grid compact">
+    <article class="stat-card">
+      <span>Total players</span>
+      <strong><%= playerCount %></strong>
+    </article>
+    <article class="stat-card">
+      <span>Total games</span>
+      <strong><%= gameCount %></strong>
+    </article>
+  </div>
+</section>
+
+<% if (success) { %>
+  <section class="card">
+    <div class="alert alert-success"><%= success %></div>
+  </section>
+<% } %>
+
+<section class="grid-2">
+  <article class="card">
+    <div class="card-head">
+      <h3>Leaders</h3>
+      <span>Computed from the score history</span>
+    </div>
+    <div class="leader-list">
+      <div class="leader-item">
+        <span>Most wins</span>
+        <% if (topWinner) { %>
+          <strong><%= topWinner.name %></strong>
+          <small><%= topWinner.wins %> wins</small>
+        <% } else { %>
+          <strong>No games yet</strong>
+        <% } %>
+      </div>
+      <div class="leader-item">
+        <span>Lowest score ever</span>
+        <% if (lowestScore) { %>
+          <strong><%= lowestScore.playerName %></strong>
+          <small><%= lowestScore.score %> points on <%= lowestScore.playedOn %></small>
+        <% } else { %>
+          <strong>No scores yet</strong>
+        <% } %>
+      </div>
+      <div class="leader-item">
+        <span>Most Jokers in 1 hand</span>
+        <% if (mostJokers) { %>
+          <strong><%= mostJokers.playerName %></strong>
+          <small><%= mostJokers.jokersCount %> Jokers in <%= mostJokers.handLabel %></small>
+        <% } else { %>
+          <strong>No joker logs yet</strong>
+        <% } %>
+      </div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <h3>Quick links</h3>
+      <span>Fast entry points</span>
+    </div>
+    <div class="actions">
+      <a class="button" href="/games/new">Record a game</a>
+      <a class="button" href="/games">Browse games</a>
+      <a class="button button-secondary" href="/players">Manage players</a>
+      <a class="button button-secondary" href="/jokers/new">Log joker hand</a>
+      <a class="button button-secondary" href="/audit">View audit log</a>
+    </div>
+  </article>
+</section>
+
+<section class="grid-2">
+  <article class="card">
+    <div class="card-head">
+      <h3>Recent games</h3>
+      <span>Latest score sheets</span>
+    </div>
+    <% if (games.length) { %>
+      <div class="stacked-cards">
+        <% games.forEach(function (game) { %>
+          <article class="mini-card">
+            <div class="mini-head">
+              <strong><a class="link-plain" href="/games/<%= game.id %>">Game #<%= game.id %></a></strong>
+              <span><%= game.playedOn %></span>
+            </div>
+            <% if (game.winner) { %>
+              <p class="mini-summary"><%= game.winner.playerName %> is leading with <%= game.winner.score %> points.</p>
+            <% } %>
+            <ul class="score-list">
+              <% game.scores.forEach(function (score) { %>
+                <li><span><%= score.playerName %></span><strong><%= score.score %></strong></li>
+              <% }); %>
+            </ul>
+          </article>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p class="empty-state">No games recorded yet.</p>
+    <% } %>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <h3>Recent joker logs</h3>
+      <span>Manual hand entries</span>
+    </div>
+    <% if (recentJokers.length) { %>
+      <div class="stacked-cards">
+        <% recentJokers.forEach(function (entry) { %>
+          <article class="mini-card">
+            <div class="mini-head">
+              <strong><%= entry.playerName %></strong>
+              <span><%= entry.createdAt %></span>
+            </div>
+            <p class="mini-summary"><%= entry.jokersCount %> Jokers<% if (entry.handLabel) { %> in <%= entry.handLabel %><% } %></p>
+          </article>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p class="empty-state">No joker logs yet.</p>
+    <% } %>
+  </article>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,9 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card">
+  <div class="card-head">
+    <h2>Something went wrong</h2>
+    <span>Check the server logs for details.</span>
+  </div>
+  <div class="alert alert-error"><%= error %></div>
+</section>
+<%- include('partials/footer') %>

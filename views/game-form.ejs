@@ -1,0 +1,48 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card form-card">
+  <div class="card-head">
+    <h2>Record a game</h2>
+    <span>Enter each participating player and their final score.</span>
+  </div>
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <% if (!players.length) { %>
+    <div class="alert alert-warn">Add at least two players before recording a game.</div>
+  <% } %>
+  <form method="post" action="/games" class="game-form">
+    <div class="form-grid two-col">
+      <label>
+        <span>Played on</span>
+        <input type="date" name="played_on" value="<%= new Date().toISOString().slice(0, 10) %>">
+      </label>
+      <label>
+        <span>Notes</span>
+        <input type="text" name="notes" placeholder="Game night notes, table rules, or round 7 drama">
+      </label>
+    </div>
+
+    <div class="score-entry-grid">
+      <% for (var slot = 0; slot < 8; slot += 1) { %>
+        <div class="score-row">
+          <label>
+            <span>Player <%= slot + 1 %></span>
+            <select name="player_id">
+              <option value="">Select a player</option>
+              <% players.forEach(function (player) { %>
+                <option value="<%= player.id %>"><%= player.name %></option>
+              <% }); %>
+            </select>
+          </label>
+          <label>
+            <span>Score</span>
+            <input type="number" name="score" min="0" step="1" placeholder="0">
+          </label>
+        </div>
+      <% } %>
+    </div>
+
+    <button class="button" type="submit">Save game</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

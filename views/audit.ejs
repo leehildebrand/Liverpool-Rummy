@@ -1,0 +1,59 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card">
+  <div class="card-head">
+    <h2>Score audit log</h2>
+    <span>Latest score edits and game deletions.</span>
+  </div>
+
+  <% if (entries.length) { %>
+    <div class="stacked-cards">
+      <% entries.forEach(function (entry) { %>
+        <article class="mini-card audit-card">
+          <div class="mini-head">
+            <strong><%= entry.action === 'update_scores' ? 'Scores updated' : 'Game deleted' %> · Game #<%= entry.gameId %></strong>
+            <span><%= entry.createdAt %></span>
+          </div>
+          <p class="mini-summary">Actor: <%= entry.actor || 'unknown' %></p>
+
+          <div class="audit-grid">
+            <div>
+              <h4>Before</h4>
+              <p class="mini-summary"><%= entry.oldPlayedOn || 'N/A' %><% if (entry.oldNotes) { %> · <%= entry.oldNotes %><% } %></p>
+              <% if (entry.oldScores.length) { %>
+                <ul class="score-list compact-list">
+                  <% entry.oldScores.forEach(function (score) { %>
+                    <li>
+                      <span><%= score.playerName %></span>
+                      <strong><%= score.score %></strong>
+                    </li>
+                  <% }); %>
+                </ul>
+              <% } else { %>
+                <p class="empty-state">No scores recorded.</p>
+              <% } %>
+            </div>
+            <div>
+              <h4>After</h4>
+              <p class="mini-summary"><%= entry.newPlayedOn || 'Deleted' %><% if (entry.newNotes) { %> · <%= entry.newNotes %><% } %></p>
+              <% if (entry.newScores.length) { %>
+                <ul class="score-list compact-list">
+                  <% entry.newScores.forEach(function (score) { %>
+                    <li>
+                      <span><%= score.playerName %></span>
+                      <strong><%= score.score %></strong>
+                    </li>
+                  <% }); %>
+                </ul>
+              <% } else { %>
+                <p class="empty-state">No remaining scores.</p>
+              <% } %>
+            </div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <p class="empty-state">No audit events yet.</p>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

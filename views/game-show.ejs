@@ -1,0 +1,53 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card hero compact-hero">
+  <div>
+    <p class="eyebrow">Game summary</p>
+    <h2>Game #<%= game.id %></h2>
+    <p class="lede">Played on <%= game.playedOn %><% if (game.notes) { %> · <%= game.notes %><% } %></p>
+  </div>
+  <div class="stat-grid compact">
+    <article class="stat-card">
+      <span>Winner</span>
+      <strong><%= winner ? winner.playerName : 'N/A' %></strong>
+    </article>
+    <article class="stat-card">
+      <span>Winning score</span>
+      <strong><%= winner ? winner.score : 'N/A' %></strong>
+    </article>
+  </div>
+</section>
+
+<section class="card">
+  <div class="actions actions-inline">
+    <a class="button" href="/games/<%= game.id %>/edit">Edit game</a>
+    <form method="post" action="/games/<%= game.id %>/delete" onsubmit="return confirm('Delete this game and all scores?');">
+      <button class="button button-danger" type="submit">Delete game</button>
+    </form>
+  </div>
+</section>
+
+<section class="card">
+  <div class="card-head">
+    <h3>Scores</h3>
+    <span>Lower is better</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% scores.forEach(function (score) { %>
+          <tr class="<%= winner && score.playerId === winner.playerId ? 'winner-row' : '' %>">
+            <td><%= score.playerName %></td>
+            <td><%= score.score %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/footer') %>
