@@ -1,0 +1,50 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card form-card">
+  <div class="card-head">
+    <h2>Edit game #<%= gameId %></h2>
+    <span>Update scores, date, and notes.</span>
+  </div>
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <form method="post" action="/games/<%= gameId %>/update" class="game-form">
+    <div class="form-grid two-col">
+      <label>
+        <span>Played on</span>
+        <input type="date" name="played_on" value="<%= playedOn %>">
+      </label>
+      <label>
+        <span>Notes</span>
+        <input type="text" name="notes" value="<%= notes %>" placeholder="Game notes">
+      </label>
+    </div>
+
+    <div class="score-entry-grid">
+      <% for (var slot = 0; slot < 8; slot += 1) {
+           var entry = scoreEntries[slot] || null;
+      %>
+        <div class="score-row">
+          <label>
+            <span>Player <%= slot + 1 %></span>
+            <select name="player_id">
+              <option value="">Select a player</option>
+              <% players.forEach(function (player) { %>
+                <option value="<%= player.id %>" <%= entry && entry.playerId === player.id ? 'selected' : '' %>><%= player.name %></option>
+              <% }); %>
+            </select>
+          </label>
+          <label>
+            <span>Score</span>
+            <input type="number" name="score" min="0" step="1" value="<%= entry ? entry.score : '' %>" placeholder="0">
+          </label>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="actions actions-inline">
+      <button class="button" type="submit">Save changes</button>
+      <a class="button button-secondary" href="/games/<%= gameId %>">Cancel</a>
+    </div>
+  </form>
+</section>
+<%- include('partials/footer') %>
