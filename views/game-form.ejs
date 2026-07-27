@@ -1,0 +1,37 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card form-card">
+  <div class="card-head">
+    <h2>Start a game</h2>
+    <span>Select participants, then record each hand as you play.</span>
+  </div>
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <% if (!players.length) { %>
+    <div class="alert alert-warn">Add at least two players before recording a game.</div>
+  <% } %>
+  <form method="post" action="/games" class="game-form">
+    <div class="form-grid two-col">
+      <label>
+        <span>Played on</span>
+        <input type="date" name="played_on" value="<%= new Date().toISOString().slice(0, 10) %>">
+      </label>
+      <label>
+        <span>Notes</span>
+        <input type="text" name="notes" placeholder="Game night notes, table rules, or round 7 drama">
+      </label>
+    </div>
+
+    <div class="participant-grid">
+      <% players.forEach(function (player) { %>
+        <label class="checkbox-card">
+          <input type="checkbox" name="player_id" value="<%= player.id %>">
+          <span><%= player.name %></span>
+        </label>
+      <% }); %>
+    </div>
+
+    <button class="button" type="submit">Start game and record hands</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

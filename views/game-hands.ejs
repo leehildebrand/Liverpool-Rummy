@@ -1,0 +1,128 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card hero compact-hero">
+  <div>
+    <p class="eyebrow">Live score sheet</p>
+    <h2>Game #<%= game.id %> · Hand <%= nextHandNumber %></h2>
+    <p class="lede">Played on <%= game.playedOn %><% if (game.notes) { %> · <%= game.notes %><% } %></p>
+    <p class="mini-summary">Status: <%= game.isCompleted ? 'Completed' : 'In progress' %></p>
+  </div>
+  <div class="stat-grid compact">
+    <article class="stat-card">
+      <span>Hands logged</span>
+      <strong><%= hands.length %></strong>
+    </article>
+    <article class="stat-card">
+      <span>Leader</span>
+      <strong><%= winners.length ? winners[0].playerName : 'N/A' %></strong>
+    </article>
+  </div>
+</section>
+
+<% if (error) { %>
+  <section class="card">
+    <div class="alert alert-error"><%= error %></div>
+  </section>
+<% } %>
+<% if (success) { %>
+  <section class="card">
+    <div class="alert alert-success"><%= success %></div>
+  </section>
+<% } %>
+
+<section class="card">
+  <div class="card-head">
+    <h3>Running totals</h3>
+    <span>Lower total wins</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Total score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% totals.forEach(function (total, idx) { %>
+          <tr class="<%= idx === 0 ? 'winner-row' : '' %>">
+            <td><%= total.playerName %></td>
+            <td><%= total.score %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<% if (!game.isCompleted) { %>
+  <section class="card form-card">
+    <div class="card-head">
+      <h3>Add hand #<%= nextHandNumber %></h3>
+      <span>Enter score increments for this hand.</span>
+    </div>
+    <form method="post" action="/games/<%= game.id %>/hands" class="game-form">
+      <div class="score-entry-grid">
+        <% participants.forEach(function (player) { %>
+          <div class="score-row">
+            <label>
+              <span>Player</span>
+              <input type="text" value="<%= player.name %>" readonly>
+            </label>
+            <label>
+              <span>Hand score</span>
+              <input type="number" name="hand_score_<%= player.id %>" min="0" step="1" required>
+            </label>
+          </div>
+        <% }); %>
+      </div>
+      <label>
+        <span>Hand note (optional)</span>
+        <input type="text" name="hand_note" placeholder="Round details, buy-ins, or table notes">
+      </label>
+      <div class="actions actions-inline">
+        <button class="button" type="submit">Save hand</button>
+        <button class="button button-secondary" type="submit" formaction="/games/<%= game.id %>/finish" formmethod="post" formnovalidate onclick="return confirm('Finish this game and calculate the winner now?');">Finish game</button>
+      </div>
+    </form>
+  </section>
+<% } %>
+
+<section class="card">
+  <div class="card-head">
+    <h3>Hand history</h3>
+    <span>Score and running total per hand</span>
+  </div>
+
+  <% if (hands.length) { %>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Hand</th>
+            <% participants.forEach(function (player) { %>
+              <th><%= player.name %></th>
+            <% }); %>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% hands.forEach(function (hand) { %>
+            <tr>
+              <td>#<%= hand.handNumber %></td>
+              <% participants.forEach(function (player) { %>
+                <td>
+                  +<%= hand.scoresByPlayer[player.id] || 0 %>
+                  <div class="cell-subtext">Total: <%= hand.runningByPlayer[player.id] || 0 %></div>
+                </td>
+              <% }); %>
+              <td><%= hand.notes || '-' %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p class="empty-state">No hands recorded yet.</p>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

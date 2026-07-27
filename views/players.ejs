@@ -1,0 +1,63 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card form-card">
+  <div class="card-head">
+    <h2>Players</h2>
+    <span>Add the people who play in your Liverpool Rummy group.</span>
+  </div>
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <% if (success) { %>
+    <div class="alert alert-success"><%= success %></div>
+  <% } %>
+  <form method="post" action="/players" class="form-grid single-col">
+    <label>
+      <span>Player name</span>
+      <input type="text" name="name" placeholder="Taylor" required>
+    </label>
+    <button class="button" type="submit">Add player</button>
+  </form>
+</section>
+
+<section class="card">
+  <div class="card-head">
+    <h3>Current roster</h3>
+    <span><%= players.length %> players</span>
+  </div>
+  <% if (players.length) { %>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Wins</th>
+            <th>Added</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% players.forEach(function (player) { %>
+            <tr>
+              <td>
+                <form method="post" action="/players/<%= player.id %>/update" class="inline-edit-form">
+                  <input type="text" name="name" value="<%= player.name %>" required>
+                  <button class="button button-small" type="submit">Save</button>
+                </form>
+              </td>
+              <td><%= player.wins %></td>
+              <td><%= player.createdAt %></td>
+              <td>
+                <form method="post" action="/players/<%= player.id %>/delete" onsubmit="return confirm('Delete this player? This only works when no game or joker data is attached.');">
+                  <button class="button button-danger button-small" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p class="empty-state">No players yet. Add the first one above.</p>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

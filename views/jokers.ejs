@@ -1,0 +1,72 @@
+<%- include('partials/header', { title: title }) %>
+<section class="card form-card">
+  <div class="card-head">
+    <h2>Log a joker hand</h2>
+    <span>Enter the biggest joker hand you saw or played.</span>
+  </div>
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <form method="post" action="/jokers" class="form-grid two-col">
+    <label>
+      <span>Player</span>
+      <select name="player_id" required>
+        <option value="">Select a player</option>
+        <% players.forEach(function (player) { %>
+          <option value="<%= player.id %>"><%= player.name %></option>
+        <% }); %>
+      </select>
+    </label>
+    <label>
+      <span>Jokers in 1 hand</span>
+      <input type="number" name="jokers_count" min="0" step="1" required>
+    </label>
+    <label>
+      <span>Game id (optional)</span>
+      <input type="number" name="game_id" min="1" step="1" placeholder="Leave blank if not tied to a game">
+    </label>
+    <label>
+      <span>Hand label</span>
+      <input type="text" name="hand_label" placeholder="Round 5 / Table B / seven-card run">
+    </label>
+    <label class="full-width">
+      <span>Notes</span>
+      <input type="text" name="notes" placeholder="Any context for the joker count">
+    </label>
+    <button class="button" type="submit">Save joker hand</button>
+  </form>
+</section>
+
+<section class="card">
+  <div class="card-head">
+    <h3>Recent joker logs</h3>
+    <span>Manual entries</span>
+  </div>
+  <% if (entries.length) { %>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Jokers</th>
+            <th>Hand</th>
+            <th>Logged</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% entries.forEach(function (entry) { %>
+            <tr>
+              <td><%= entry.playerName %></td>
+              <td><%= entry.jokersCount %></td>
+              <td><%= entry.handLabel || 'Manual hand entry' %></td>
+              <td><%= entry.createdAt %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p class="empty-state">No joker logs yet.</p>
+  <% } %>
+</section>
+<%- include('partials/footer') %>
