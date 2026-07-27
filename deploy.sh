@@ -10,6 +10,10 @@ DEPLOY_USER="leehbcmz"
 REMOTE_APP_DIR="apps/liverpool-rummy"
 PM2_APP_NAME="liverpool-rummy"
 
+# Use CloudLinux Node 10 binaries directly in non-interactive SSH.
+REMOTE_NPM_BIN="/opt/alt/alt-nodejs10/root/usr/bin/npm"
+REMOTE_PM2_BIN="/home/leehbcmz/nodevenv/liverpoolrummy/10/lib/bin/pm2"
+
 LOCAL_DIR="$(cd "$(dirname "$0")" && pwd)"
 RELEASE_ID="$(date +%Y%m%d%H%M%S)"
 ARCHIVE_NAME="liverpool-rummy-${RELEASE_ID}.tgz"
@@ -79,42 +83,53 @@ REMOTE_APP_DIR='${REMOTE_APP_DIR}'
 PM2_APP_NAME='${PM2_APP_NAME}'
 RELEASE_ID='${RELEASE_ID}'
 REMOTE_ARCHIVE='${REMOTE_ARCHIVE}'
+NPM_BIN='${REMOTE_NPM_BIN}'
+PM2_BIN='${REMOTE_PM2_BIN}'
+NODE_BIN_DIR='/opt/alt/alt-nodejs10/root/usr/bin'
+REMOTE_APP_ROOT=\"\${HOME}/\${REMOTE_APP_DIR}\"
+export PATH=\"\${NODE_BIN_DIR}:\${PATH}\"
 
-mkdir -p \"\${REMOTE_APP_DIR}/releases\" \"\${REMOTE_APP_DIR}/shared\"
-RELEASE_DIR=\"\${REMOTE_APP_DIR}/releases/\${RELEASE_ID}\"
+if [[ ! -x \"\${NPM_BIN}\" ]]; then
+  echo 'npm binary not found at '"\${NPM_BIN}"'.'
+  exit 1
+fi
+
+mkdir -p \"\${REMOTE_APP_ROOT}/releases\" \"\${REMOTE_APP_ROOT}/shared\"
+RELEASE_DIR=\"\${REMOTE_APP_ROOT}/releases/\${RELEASE_ID}\"
 mkdir -p \"\${RELEASE_DIR}\"
 
 tar -xzf \"\${REMOTE_ARCHIVE}\" -C \"\${RELEASE_DIR}\"
 
-if [[ -f \"\${REMOTE_APP_DIR}/shared/.env\" ]]; then
-  ln -sfn \"\${REMOTE_APP_DIR}/shared/.env\" \"\${RELEASE_DIR}/.env\"
+if [[ -f \"\${REMOTE_APP_ROOT}/shared/.env\" ]]; then
+  ln -sfn \"\${REMOTE_APP_ROOT}/shared/.env\" \"\${RELEASE_DIR}/.env\"
 else
-  echo 'Missing shared .env file at '\"\${REMOTE_APP_DIR}/shared/.env\"'.'
+  echo 'Missing shared .env file at '"\${REMOTE_APP_ROOT}/shared/.env"'.'
   echo 'Create it with DATABASE_URL before first deploy.'
   exit 1
 fi
 
 cd \"\${RELEASE_DIR}\"
 if [[ -f package-lock.json ]]; then
-  npm ci --omit=dev || npm ci --production
+  if ! \"\${NPM_BIN}\" ci --omit=dev; then
+    rm -f package-lock.json
+    \"\${NPM_BIN}\" install --production --no-package-lock
+  fi
 else
-  npm install --omit=dev || npm install --production
+  \"\${NPM_BIN}\" install --production --no-package-lock
 fi
 
-ln -sfn \"\${RELEASE_DIR}\" \"\${REMOTE_APP_DIR}/current\"
+ln -sfn \"\${RELEASE_DIR}\" \"\${REMOTE_APP_ROOT}/current\"
 
-if command -v pm2 >/dev/null 2>&1; then
-  cd \"\${REMOTE_APP_DIR}/current\"
-  if pm2 describe \"\${PM2_APP_NAME}\" >/dev/null 2>&1; then
-    pm2 restart \"\${PM2_APP_NAME}\" --update-env
-  else
-    pm2 start server.js --name \"\${PM2_APP_NAME}\" --update-env
-  fi
-  pm2 save || true
-else
-  echo 'PM2 is not installed on the server. Install PM2 or replace restart logic in deploy.sh.'
+if [[ ! -x \"\${PM2_BIN}\" ]]; then
+  echo 'PM2 binary not found at '"\${PM2_BIN}"'.'
+  echo 'Install PM2 in your user environment and re-run deploy.'
   exit 1
 fi
+
+cd \"\${REMOTE_APP_ROOT}/current\"
+"\${PM2_BIN}" delete "\${PM2_APP_NAME}" >/dev/null 2>&1 || true
+"\${PM2_BIN}" start app.js --name "\${PM2_APP_NAME}" --update-env
+\"\${PM2_BIN}\" save || true
 
 rm -f \"\${REMOTE_ARCHIVE}\"
 "

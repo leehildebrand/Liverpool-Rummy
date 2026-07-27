@@ -42,3 +42,16 @@ The deploy.sh script now deploys the Node app over SSH instead of mirroring stat
 	./deploy.sh
 
 The script creates a timestamped release, installs production dependencies, updates apps/liverpool-rummy/current, and restarts the PM2 process named liverpool-rummy.
+
+## cPanel Node app settings
+
+If your domain still shows the default "It works!" page, cPanel is still using its starter app.
+
+Set these values in cPanel > Setup Node.js App:
+
+1. Application root: /home/leehbcmz/apps/liverpool-rummy/current
+2. Application URL: liverpoolrummy.leehildebrand.name
+3. Application startup file: app.js
+4. Node.js version: 10.x (matches this project)
+
+After saving, click Restart App in cPanel.
